@@ -1,11 +1,16 @@
+// ==================================================
+//
+// Author: GIFTED-BOY
+// Email: 120138380@qq.com
+// Create Time: 2018.4.21
+// Version: v1.0
+//
+// ==================================================
+
 #ifndef _KNN_H_
 #define _KNN_H_
 
 #include <vector>
-#include <algorithm>
-#include <iostream>
-#include <io.h>
-#include <fstream>
 #include <string>
 
 using namespace std;

@@ -11,7 +11,7 @@ int main()
 
 	//DTTest();
 
-	NBTest();
+	//NBTest();
 	
 
 	system("pause");

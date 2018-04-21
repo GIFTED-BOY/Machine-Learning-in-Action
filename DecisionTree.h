@@ -1,14 +1,18 @@
+// ==================================================
+//
+// Author: GIFTED-BOY
+// Email: 120138380@qq.com
+// Create Time: 2018.4.21
+// Version: v1.0
+//
+// ==================================================
+
 #ifndef _DECISION_TREE_H_
 #define _DECISION_TREE_H_
 
-#include <vector>
 #include <unordered_map>
-#include <math.h>
-#include <algorithm>
-#include <unordered_set>
-#include <fstream>
 #include <string>
-#include <iostream>
+#include <vector>
 
 using namespace std;
 

@@ -1,4 +1,18 @@
+// ==================================================
+//
+// Author: GIFTED-BOY
+// Email: 120138380@qq.com
+// Create Time: 2018.4.21
+// Version: v1.0
+//
+// ==================================================
+
 #include "DecisionTree.h"
+#include <math.h>
+#include <algorithm>
+#include <unordered_set>
+#include <fstream>
+#include <iostream>
 
 DecisionTree::DecisionTree(vector<vector<string> > x, int m, int n) : dataSet(x), sampleNum(m), featureNum(n) {}
 

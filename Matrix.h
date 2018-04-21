@@ -1,9 +1,16 @@
+// ==================================================
+//
+// Author: GIFTED-BOY
+// Email: 120138380@qq.com
+// Create Time: 2018.4.21
+// Version: v1.0
+//
+// ==================================================
+
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
-#include <iostream>
 #include <vector>
-#include <math.h>
 
 using namespace std;
 

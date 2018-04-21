@@ -1,4 +1,19 @@
+// ==================================================
+//
+// Author: GIFTED-BOY
+// Email: 120138380@qq.com
+// Create Time: 2018.4.21
+// Version: v1.0
+//
+// ==================================================
+
 #include "NaiveBayes.h"
+#include <unordered_set>
+#include <algorithm>
+#include <math.h>
+#include <fstream>
+#include <time.h>
+#include <iostream>
 
 NaiveBayes::NaiveBayes(vector<vector<string> > x, vector<int> y, int m, int c) : dataSet(x), labels(y), sampleNum(m), classKindNum(c)
 {

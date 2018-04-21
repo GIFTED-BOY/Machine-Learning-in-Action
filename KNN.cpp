@@ -1,4 +1,17 @@
+// ==================================================
+//
+// Author: GIFTED-BOY
+// Email: 120138380@qq.com
+// Create Time: 2018.4.21
+// Version: v1.0
+//
+// ==================================================
+
 #include "KNN.h"
+#include <algorithm>
+#include <iostream>
+#include <io.h>
+#include <fstream>
 
 KNN::KNN(vector<vector<double> > x, vector<int> y, int m, int n) : dataSet(x), labels(y), sampleNum(m), featureNum(n) {}
 
