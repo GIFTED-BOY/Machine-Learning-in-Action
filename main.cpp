@@ -1,6 +1,7 @@
 #include "KNN.h"
 #include "DecisionTree.h"
 #include "NaiveBayes.h"
+#include "LogisticRegression.h"
 
 using namespace std;
 
@@ -12,6 +13,8 @@ int main()
 	//DTTest();
 
 	//NBTest();
+
+	LRTest();
 	
 
 	system("pause");
