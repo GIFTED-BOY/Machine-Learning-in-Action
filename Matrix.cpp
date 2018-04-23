@@ -53,6 +53,15 @@ Matrix::Matrix(vector<double> mData, int m, int n)
 	for (int i = 0; i < m * n; i++) data[i] = mData[i];
 }
 
+Matrix::Matrix(vector<vector<double> > mData, int m, int n)
+{
+	rowNum = m;
+	columnNum = n;
+	data = new double[m * n];
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++) data[i * n + j] = mData[i][j];
+}
+
 Matrix::~Matrix() { if (data != NULL) delete[] data; }
 
 double Matrix::getValue(int i, int j) const { return data[i * columnNum + j]; }
@@ -353,4 +362,22 @@ ostream& operator << (ostream &os, const Matrix &mMatrix)
 	}
 	os.flush();
 	return os;
+}
+
+Matrix Matrix::ones(int m, int n)
+{
+	Matrix o(m, n);
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++) o.setValue(i, j, 1);
+	return o;
+}
+
+Matrix Matrix::sigmoid(Matrix matrix)
+{
+	int m = matrix.getRowNum();
+	int n = matrix.getColumnNum();
+	Matrix h(m, n);
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++) h.setValue(i, j, 1.0 / (1.0 + exp(-matrix.getValue(i, j))));
+	return h;
 }

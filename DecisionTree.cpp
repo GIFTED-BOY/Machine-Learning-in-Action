@@ -195,7 +195,7 @@ void DTTest()
 	getDataSet(trainingData);
 	DecisionTree dt(trainingData, trainingData.size(), trainingData[0].size() - 1);
 	dt.createTree();
-	dt.traverseTree();
+	//dt.traverseTree();
 	vector<string> testingData;
 	testingData.push_back("young");
 	testingData.push_back("hyper");

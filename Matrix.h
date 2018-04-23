@@ -28,6 +28,7 @@ public:
 	Matrix(const Matrix &mMatrix);
 	Matrix(double *mData, int m, int n);
 	Matrix(vector<double> mData, int m, int n);
+	Matrix(vector<vector<double> > mData, int m, int n);
 	~Matrix();
 
 	double getValue(int i, int j) const;
@@ -60,6 +61,9 @@ public:
 	Matrix& operator = (const Matrix &mMatrix);
 
 	friend ostream& operator << (ostream &os, const Matrix &mMatrix);
+
+	static Matrix ones(int m, int n);
+	static Matrix sigmoid(Matrix matrix);
 
 private:
 	void swapRow(int i, int j); // ½»»»i, jÁ½ÐÐ
