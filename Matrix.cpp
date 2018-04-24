@@ -372,7 +372,11 @@ Matrix Matrix::ones(int m, int n)
 	return o;
 }
 
-Matrix Matrix::sigmoid(Matrix matrix)
+
+
+
+
+Matrix sigmoid(Matrix matrix)
 {
 	int m = matrix.getRowNum();
 	int n = matrix.getColumnNum();

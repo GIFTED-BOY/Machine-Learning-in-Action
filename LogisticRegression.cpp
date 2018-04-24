@@ -31,7 +31,7 @@ int LogisticRegression::classify(Matrix x) { return getClass(x); }
 void LogisticRegression::batchGradientDescent()
 {
 	for (int i = 0; i < trainingRounds; i++)
-		weights = weights + dataSet.transpose() * (labels - Matrix::sigmoid(dataSet * weights)) * alpha;
+		weights = weights + dataSet.transpose() * (labels - sigmoid(dataSet * weights)) * alpha;
 }
 
 void LogisticRegression::stochasticGradientDescent()
@@ -49,7 +49,7 @@ void LogisticRegression::stochasticGradientDescent()
 			int r = rand() % indexes.size();
 			weights = weights
 				+ dataSet.getRowValue(indexes[r]).transpose()
-				* (labels.getValue(indexes[r], 0) - Matrix::sigmoid(dataSet.getRowValue(indexes[r]) * weights).getValue(0, 0))
+				* (labels.getValue(indexes[r], 0) - sigmoid(dataSet.getRowValue(indexes[r]) * weights).getValue(0, 0))
 				* alpha;
 			swap(indexes[r], indexes[indexes.size() - 1]);
 			indexes.pop_back();
@@ -57,7 +57,7 @@ void LogisticRegression::stochasticGradientDescent()
 	}
 }
 
-int LogisticRegression::getClass(Matrix x) { return Matrix::sigmoid(x * weights).getValue(0, 0) >= 0.5 ? 1 : 0; }
+int LogisticRegression::getClass(Matrix x) { return sigmoid(x * weights).getValue(0, 0) >= 0.5 ? 1 : 0; }
 
 
 

@@ -63,12 +63,14 @@ public:
 	friend ostream& operator << (ostream &os, const Matrix &mMatrix);
 
 	static Matrix ones(int m, int n);
-	static Matrix sigmoid(Matrix matrix);
 
 private:
 	void swapRow(int i, int j); // 交换i, j两行
 	// 行变换：j < 0时，将第i行乘以multiple；j > 0时，将第i行的multiple倍加到第j行
 	void rowTransform(int i, int j, double multiple);
 };
+
+
+Matrix sigmoid(Matrix matrix);
 
 #endif
