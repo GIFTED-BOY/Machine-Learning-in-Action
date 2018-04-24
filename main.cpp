@@ -2,6 +2,7 @@
 #include "DecisionTree.h"
 #include "NaiveBayes.h"
 #include "LogisticRegression.h"
+#include "AdaBoost.h"
 
 using namespace std;
 
@@ -14,7 +15,9 @@ int main()
 
 	//NBTest();
 
-	LRTest();
+	//LRTest();
+
+	ABTest();
 	
 
 	system("pause");
