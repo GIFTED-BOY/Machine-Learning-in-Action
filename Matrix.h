@@ -44,6 +44,11 @@ public:
 	double getRowMaxValue(int i) const;
 	double getColumnMaxValue(int i) const;
 
+	int getRowMinValueIndex(int i) const;
+	int getColumnMinValueIndex(int i) const;
+	double getRowMinValue(int i) const;
+	double getColumnMinValue(int i) const;
+
 	Matrix transpose();
 	Matrix inverse();
 
@@ -52,12 +57,18 @@ public:
 	Matrix rowMeans();
 	Matrix columnMeans();
 
+	Matrix rowSum();
+	Matrix columnSum();
+	double rowSum(int i);
+	double columnSum(int i);
+
 	double det();
 
 	Matrix operator + (const Matrix &mMatrix);
 	Matrix operator - (const Matrix &mMatrix);
 	Matrix operator * (const Matrix &mMatrix);
 	Matrix operator * (const double multiple);
+	Matrix operator / (const double divide);
 	Matrix& operator = (const Matrix &mMatrix);
 
 	friend ostream& operator << (ostream &os, const Matrix &mMatrix);
@@ -72,5 +83,8 @@ private:
 
 
 Matrix sigmoid(Matrix matrix);
+Matrix exp(Matrix matrix);
+Matrix sign(Matrix matrix);
+Matrix multiply(Matrix a, Matrix b);
 
 #endif

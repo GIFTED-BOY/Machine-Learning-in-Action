@@ -122,6 +122,42 @@ double Matrix::getRowMaxValue(int i) const { return getValue(i, getRowMaxValueIn
 
 double Matrix::getColumnMaxValue(int i) const { return getValue(getColumnMaxValueIndex(i), i); }
 
+int Matrix::getRowMinValueIndex(int i) const
+{
+	double min = getValue(i, 0);
+	double index = 0;
+	for (int j = 1; j < columnNum; j++)
+	{
+		double d = getValue(i, j);
+		if (d < min)
+		{
+			min = d;
+			index = j;
+		}
+	}
+	return index;
+}
+
+int Matrix::getColumnMinValueIndex(int i) const
+{
+	double min = getValue(0, i);
+	double index = 0;
+	for (int j = 1; j < rowNum; j++)
+	{
+		double d = getValue(j, i);
+		if (d < min)
+		{
+			min = d;
+			index = j;
+		}
+	}
+	return index;
+}
+
+double Matrix::getRowMinValue(int i) const { return getValue(i, getRowMinValueIndex(i)); }
+
+double Matrix::getColumnMinValue(int i) const { return getValue(getColumnMinValueIndex(i), i); }
+
 Matrix Matrix::transpose()
 {
 	Matrix transposeMatrix(columnNum, rowNum);
@@ -134,7 +170,7 @@ Matrix Matrix::inverse()
 {
 	if (rowNum != columnNum || det() == 0)
 	{
-		cout << "cannot do inverse !" << endl;
+		cout << "cannot do inverse!" << endl;
 		return *this;
 	}
 
@@ -186,7 +222,7 @@ Matrix Matrix::rowStd()
 		double means = getRowValue(i).rowMeans().getValue(0, 0);
 		double sigma = 0.0;
 		for (int j = 0; j < columnNum; j++) sigma += (getValue(i, j) - means) * (getValue(i, j) - means);
-		stdMatrix.setValue(i, 0, sqrt(sigma / rowNum));
+		stdMatrix.setValue(i, 0, sqrt(sigma / columnNum));
 	}
 	return stdMatrix;
 }
@@ -207,32 +243,50 @@ Matrix Matrix::columnStd()
 Matrix Matrix::rowMeans()
 {
 	Matrix meansMatrix(rowNum, 1);
-	for (int i = 0; i < rowNum; i++)
-	{
-		double sigma = 0.0;
-		for (int j = 0; j < columnNum; j++) sigma += getValue(i, j);
-		meansMatrix.setValue(i, 0, sigma / rowNum);
-	}
+	for (int i = 0; i < rowNum; i++) meansMatrix.setValue(i, 0, rowSum(i) / columnNum);
 	return meansMatrix;
 }
 
 Matrix Matrix::columnMeans()
 {
 	Matrix meansMatrix(1, columnNum);
-	for (int i = 0; i < columnNum; i++)
-	{
-		double sigma = 0.0;
-		for (int j = 0; j < rowNum; j++) sigma += getValue(j, i);
-		meansMatrix.setValue(0, i, sigma / rowNum);
-	}
+	for (int i = 0; i < columnNum; i++) meansMatrix.setValue(0, i, columnSum(i) / rowNum);
 	return meansMatrix;
+}
+
+Matrix Matrix::rowSum()
+{
+	Matrix sumMatrix(rowNum, 1);
+	for (int i = 0; i < rowNum; i++) sumMatrix.setValue(i, 0, rowSum(i));
+	return sumMatrix;
+}
+
+Matrix Matrix::columnSum()
+{
+	Matrix sumMatrix(1, columnNum);
+	for (int i = 0; i < columnNum; i++) sumMatrix.setValue(0, i, columnSum(i));
+	return sumMatrix;
+}
+
+double Matrix::rowSum(int i)
+{
+	double sum = 0.0;
+	for (int j = 0; j < columnNum; j++) sum += getValue(i, j);
+	return sum;
+}
+
+double Matrix::columnSum(int i)
+{
+	double sum = 0.0;
+	for (int j = 0; j < rowNum; j++) sum += getValue(j, i);
+	return sum;
 }
 
 double Matrix::det()
 {
 	if (rowNum != columnNum)
 	{
-		cout << "matrix not square£¡" << endl;
+		cout << "matrix not square!" << endl;
 		return 0;
 	}
 
@@ -300,7 +354,7 @@ Matrix Matrix::operator * (const Matrix &mMatrix)
 {
 	if (columnNum != mMatrix.rowNum)
 	{
-		cout << "cannot do multiply£¡";
+		cout << "cannot do multiply!";
 		return *this;
 	}
 
@@ -322,6 +376,20 @@ Matrix Matrix::operator * (const double multiple)
 	Matrix tmp = *this;
 	for (int i = 0; i < rowNum; i++)
 		for (int j = 0; j < columnNum; j++) tmp.setValue(i, j, getValue(i, j) * multiple);
+	return tmp;
+}
+
+Matrix Matrix::operator / (const double divide)
+{
+	if (0 == divide)
+	{
+		cout << "cannot do divide!";
+		return *this;
+	}
+
+	Matrix tmp = *this;
+	for (int i = 0; i < rowNum; i++)
+		for (int j = 0; j < columnNum; j++) tmp.setValue(i, j, getValue(i, j) / divide);
 	return tmp;
 }
 
@@ -384,4 +452,40 @@ Matrix sigmoid(Matrix matrix)
 	for (int i = 0; i < m; i++)
 		for (int j = 0; j < n; j++) h.setValue(i, j, 1.0 / (1.0 + exp(-matrix.getValue(i, j))));
 	return h;
+}
+
+Matrix exp(Matrix matrix)
+{
+	int m = matrix.getRowNum();
+	int n = matrix.getColumnNum();
+	Matrix e(m, n);
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++) e.setValue(i, j, exp(matrix.getValue(i, j)));
+	return e;
+}
+
+Matrix sign(Matrix matrix)
+{
+	int m = matrix.getRowNum();
+	int n = matrix.getColumnNum();
+	Matrix s(m, n);
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++) s.setValue(i, j, matrix.getValue(i, j) >= 0 ? 1 : 0);
+	return s;
+}
+
+Matrix multiply(Matrix a, Matrix b)
+{
+	if (a.getRowNum() != b.getRowNum() || a.getColumnNum() != b.getColumnNum())
+	{
+		cout << "cannot do multiply!";
+		return a;
+	}
+
+	int m = a.getRowNum();
+	int n = a.getColumnNum();
+	Matrix matrix(m, n);
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++) matrix.setValue(i, j, a.getValue(i, j) * b.getValue(i, j));
+	return matrix;
 }
