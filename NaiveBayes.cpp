@@ -147,7 +147,7 @@ string getSample(string fileName)
 	return sample;
 }
 
-void getDataSet(vector<vector<string> > &dataSet, vector<int> &labels)
+void getDataSet_NB(vector<vector<string> > &dataSet, vector<int> &labels)
 {
 	for (int i = 1; i <= 25; i++)
 	{
@@ -164,7 +164,7 @@ void NBTest()
 	srand((unsigned) time(NULL));
 	vector<vector<string> > dataSet;
 	vector<int> labels;
-	getDataSet(dataSet, labels);
+	getDataSet_NB(dataSet, labels);
 
 	int sampleNum = dataSet.size();
 	int testingNum = 10;

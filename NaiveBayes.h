@@ -48,7 +48,7 @@ private:
 
 vector<string> getWordsVector(string s);
 string getSample(string fileName);
-void getDataSet(vector<vector<string> > &dataSet, vector<int> &labels);
+void getDataSet_NB(vector<vector<string> > &dataSet, vector<int> &labels);
 void NBTest();
 
 
