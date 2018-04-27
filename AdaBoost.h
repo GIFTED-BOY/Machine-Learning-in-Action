@@ -15,6 +15,8 @@
 
 using namespace std;
 
+// -----------------------------------------------------
+
 class DecisionStump
 {
 public:
@@ -23,6 +25,8 @@ public:
 	int ineq;
 	double alpha;
 };
+
+// -----------------------------------------------------
 
 class AdaBoost
 {
@@ -48,7 +52,7 @@ private:
 };
 
 
-void getDataSet2(string fileName, vector<vector<double> > &dataSet, vector<double> &labels);
+void getDataSet_AB(string fileName, vector<vector<double> > &dataSet, vector<double> &labels);
 void ABTest();
 
 #endif

@@ -14,12 +14,36 @@
 
 using namespace std;
 
+// --------------------------------------------------------------------------
+
+class Row
+{
+	friend class Matrix;
+
+private:
+	int dataNum;
+	double *data;
+
+	Row();
+	Row(int n);
+
+public:
+	Row(const Row &r);
+	~Row();
+
+	double& operator [] (const int i);
+	Row& operator = (const Row &r);
+	friend ostream& operator << (ostream &os, const Row &r);
+};
+
+// --------------------------------------------------------------------------
+
 class Matrix
 {
 private:
 	int rowNum;
 	int columnNum;
-	double *data;
+	Row *rows;
 
 public:
 	Matrix();
@@ -31,26 +55,24 @@ public:
 	Matrix(vector<vector<double> > mData, int m, int n);
 	~Matrix();
 
-	double getValue(int i, int j) const;
-	void setValue(int i, int j, double value);
 	int getRowNum() const;
 	int getColumnNum() const;
 
-	Matrix getRowValue(int i) const;
-	Matrix getColumnValue(int i) const;
+	Matrix row(int i) const;
+	Matrix column(int i) const;
 
-	int getRowMaxValueIndex(int i) const;
-	int getColumnMaxValueIndex(int i) const;
-	double getRowMaxValue(int i) const;
-	double getColumnMaxValue(int i) const;
+	int rowMaxValueIndex(int i) const;
+	int columnMaxValueIndex(int i) const;
+	double rowMaxValue(int i) const;
+	double columnMaxValue(int i) const;
 
-	int getRowMinValueIndex(int i) const;
-	int getColumnMinValueIndex(int i) const;
-	double getRowMinValue(int i) const;
-	double getColumnMinValue(int i) const;
+	int rowMinValueIndex(int i) const;
+	int columnMinValueIndex(int i) const;
+	double rowMinValue(int i) const;
+	double columnMinValue(int i) const;
 
-	Matrix transpose();
-	Matrix inverse();
+	Matrix T();
+	Matrix i();
 
 	Matrix rowStd();
 	Matrix columnStd();
@@ -70,6 +92,7 @@ public:
 	Matrix operator * (const double multiple);
 	Matrix operator / (const double divide);
 	Matrix& operator = (const Matrix &mMatrix);
+	Row& operator [] (const int i);
 
 	friend ostream& operator << (ostream &os, const Matrix &mMatrix);
 

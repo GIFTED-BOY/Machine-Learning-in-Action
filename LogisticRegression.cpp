@@ -31,7 +31,7 @@ int LogisticRegression::classify(Matrix x) { return getClass(x); }
 void LogisticRegression::batchGradientDescent()
 {
 	for (int i = 0; i < trainingRounds; i++)
-		weights = weights + dataSet.transpose() * (labels - sigmoid(dataSet * weights)) * alpha;
+		weights = weights + dataSet.T() * (labels - sigmoid(dataSet * weights)) * alpha;
 }
 
 void LogisticRegression::stochasticGradientDescent()
@@ -48,8 +48,8 @@ void LogisticRegression::stochasticGradientDescent()
 			alpha = 4.0 / (1 + j + i) + 0.01;
 			int r = rand() % indexes.size();
 			weights = weights
-				+ dataSet.getRowValue(indexes[r]).transpose()
-				* (labels.getValue(indexes[r], 0) - sigmoid(dataSet.getRowValue(indexes[r]) * weights).getValue(0, 0))
+				+ dataSet.row(indexes[r]).T()
+				* (labels[indexes[r]][0] - sigmoid(dataSet.row(indexes[r]) * weights)[0][0])
 				* alpha;
 			swap(indexes[r], indexes[indexes.size() - 1]);
 			indexes.pop_back();
@@ -57,13 +57,13 @@ void LogisticRegression::stochasticGradientDescent()
 	}
 }
 
-int LogisticRegression::getClass(Matrix x) { return sigmoid(x * weights).getValue(0, 0) >= 0.5 ? 1 : 0; }
+int LogisticRegression::getClass(Matrix x) { return sigmoid(x * weights)[0][0] >= 0.5; }
 
 
 
 
 
-void getDataSet(string fileName, vector<vector<double> > &dataSet, vector<double> &labels)
+void getDataSe_LR(string fileName, vector<vector<double> > &dataSet, vector<double> &labels)
 {
 	ifstream in("dataset/Ch05/" + fileName);
 	string str;
@@ -90,14 +90,14 @@ void LRTest()
 {
 	vector<vector<double> > trainingDataSet;
 	vector<double> trainingLabels;
-	getDataSet("horseColicTraining.txt", trainingDataSet, trainingLabels);
+	getDataSe_LR("horseColicTraining.txt", trainingDataSet, trainingLabels);
 	Matrix trainingX(trainingDataSet, trainingDataSet.size(), trainingDataSet[0].size());
 	Matrix trainingY(trainingLabels, trainingLabels.size(), 1);
 	LogisticRegression lr(trainingX, trainingY, trainingDataSet.size(), 0.01, 1000);
 
 	vector<vector<double> > testingDataSet;
 	vector<double> testingLabels;
-	getDataSet("horseColicTest.txt", testingDataSet, testingLabels);
+	getDataSe_LR("horseColicTest.txt", testingDataSet, testingLabels);
 	int testingNum = testingDataSet.size();
 	Matrix testingX(testingDataSet, testingNum, testingDataSet[0].size());
 
@@ -110,7 +110,7 @@ void LRTest()
 		int correctNum = 0;
 		for (int j = 0; j < testingNum; j++)
 		{
-			int cls = lr.classify(testingX.getRowValue(j));
+			int cls = lr.classify(testingX.row(j));
 			if (cls == testingLabels[j]) correctNum++;
 			cout << "lr: " << cls << "\treal: " << testingLabels[j] << endl;
 		}

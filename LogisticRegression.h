@@ -36,7 +36,7 @@ private:
 };
 
 
-void getDataSet(string fileName, vector<vector<double> > &dataSet, vector<double> &labels);
+void getDataSe_LR(string fileName, vector<vector<double> > &dataSet, vector<double> &labels);
 void LRTest();
 
 #endif

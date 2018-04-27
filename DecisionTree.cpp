@@ -168,7 +168,7 @@ string DecisionTree::getClass(TreeNode *mRoot, vector<string> x)
 
 
 
-void getDataSet(vector<vector<string> > &mDataSet)
+void getDataSet_DT(vector<vector<string> > &mDataSet)
 {
 	ifstream in("dataset/Ch03/lenses.txt");
 	string str;
@@ -192,7 +192,7 @@ void getDataSet(vector<vector<string> > &mDataSet)
 void DTTest()
 {
 	vector<vector<string> > trainingData;
-	getDataSet(trainingData);
+	getDataSet_DT(trainingData);
 	DecisionTree dt(trainingData, trainingData.size(), trainingData[0].size() - 1);
 	dt.createTree();
 	//dt.traverseTree();

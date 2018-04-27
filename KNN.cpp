@@ -13,35 +13,35 @@
 #include <io.h>
 #include <fstream>
 
-KNN::KNN(vector<vector<double> > x, vector<int> y, int m, int n) : dataSet(x), labels(y), sampleNum(m), featureNum(n) {}
+KNN::KNN(Matrix x, Matrix y, int m, int n) : dataSet(x), labels(y), sampleNum(m), featureNum(n) {}
 
-int KNN::classify(vector<double> x, int k) { return getClass(getKNN(x, k), k); }
+double KNN::classify(Matrix x, int k) { return getClass(getKNN(x, k), k); }
 
 bool comp(vector<double> &a, vector<double> &b) { return a[0] < b[0]; }
-vector<int> KNN::getKNN(vector<double> x, int k)
+vector<double> KNN::getKNN(Matrix x, int k)
 {
 	vector<vector<double> > dists;
 	for (int i = 0; i < sampleNum; i++)
 	{
-		double dist = 0.0;
-		for (int j = 0; j < featureNum; j++) dist += (dataSet[i][j] - x[j]) * (dataSet[i][j] - x[j]);
+		Matrix diff = dataSet.row(i) - x;
+		double dist = (diff * diff.T())[0][0];
 		vector<double> v(2);
 		v[0] = dist;
-		v[1] = labels[i];
+		v[1] = labels[i][0];
 		dists.push_back(v);
 	}
 	sort(dists.begin(), dists.end(), comp);
 
-	vector<int> knn(k);
+	vector<double> knn(k);
 	for (int i = 0; i < k; i++) knn[i] = dists[i][1];
 	return knn;
 }
 
-int KNN::getClass(vector<int> knn, int k)
+double KNN::getClass(vector<double> knn, int k)
 {
 	sort(knn.begin(), knn.end());
-	int currentCls = knn[0];
-	int maxCls = knn[0];
+	double currentCls = knn[0];
+	double maxCls = knn[0];
 	int currentFreq = 1;
 	int maxFreq = 1;
 	for (int i = 1; i < k; i++)
@@ -65,7 +65,7 @@ int KNN::getClass(vector<int> knn, int k)
 
 
 
-void getDataSet(vector<vector<double> > &dataSet, vector<int> &labels)
+void getDataSet_KNN(vector<vector<double> > &dataSet, vector<double> &labels)
 {
 	ifstream in("dataset/Ch02/datingTestSet2.txt");
 	string str;
@@ -118,7 +118,7 @@ vector<double> getSample(string fileName)
 	return x;
 }
 
-void getDataSet(string dir, vector<vector<double> > &dataSet, vector<int> &labels)
+void getDataSet_KNN(string dir, vector<vector<double> > &dataSet, vector<double> &labels)
 {
 	long handle;
 	_finddata_t fileInfo;
@@ -139,15 +139,19 @@ void getDataSet(string dir, vector<vector<double> > &dataSet, vector<int> &label
 	}
 }
 
-void test(vector<vector<double> > trainingData, vector<int> trainingLabels, vector<vector<double> > testingData, vector<int> testingLabels)
+void test(vector<vector<double> > trainingData, vector<double> trainingLabels, vector<vector<double> > testingData, vector<double> testingLabels)
 {
 	int m = trainingData.size();
 	int testingNum = testingData.size();
-	KNN knn(trainingData, trainingLabels, m, trainingData[0].size());
+	Matrix trainingX(trainingData, m, trainingData[0].size());
+	Matrix trainingY(trainingLabels, m, 1);
+	KNN knn(trainingX, trainingY, m, trainingData[0].size());
+
+	Matrix testingX(testingData, testingNum, testingData[0].size());
 	int correctNum = 0;
 	for (int i = 0; i < testingNum; i++)
 	{
-		int cls = knn.classify(testingData[i], 10);
+		double cls = knn.classify(testingX.row(i), 10);
 		if (cls == testingLabels[i]) correctNum++;
 		cout << "knn: " << cls << "\treal: " << testingLabels[i] << endl;
 	}
@@ -159,8 +163,8 @@ void test(vector<vector<double> > trainingData, vector<int> trainingLabels, vect
 void KNNTest1()
 {
 	vector<vector<double> > dataSet;
-	vector<int> labels;
-	getDataSet(dataSet, labels);
+	vector<double> labels;
+	getDataSet_KNN(dataSet, labels);
 
 	int m = dataSet.size();
 	int featureNum = dataSet[0].size();
@@ -171,8 +175,8 @@ void KNNTest1()
 	vector<vector<double> > testingData(testingNum);
 	copy(dataSet.begin(), dataSet.begin() + testingNum, testingData.begin());
 	copy(dataSet.begin() + testingNum, dataSet.end(), trainingData.begin());
-	vector<int> trainingLabels(m - testingNum);
-	vector<int> testingLabels(testingNum);
+	vector<double> trainingLabels(m - testingNum);
+	vector<double> testingLabels(testingNum);
 	copy(labels.begin(), labels.begin() + testingNum, testingLabels.begin());
 	copy(labels.begin() + testingNum, labels.end(), trainingLabels.begin());
 
@@ -183,10 +187,10 @@ void KNNTest2()
 {
 	vector<vector<double> > trainingData;
 	vector<vector<double> > testingData;
-	vector<int> trainingLabels;
-	vector<int> testingLabels;
-	getDataSet("dataset/Ch02/digits/trainingDigits", trainingData, trainingLabels);
-	getDataSet("dataset/Ch02/digits/testDigits", testingData, testingLabels);
+	vector<double> trainingLabels;
+	vector<double> testingLabels;
+	getDataSet_KNN("dataset/Ch02/digits/trainingDigits", trainingData, trainingLabels);
+	getDataSet_KNN("dataset/Ch02/digits/testDigits", testingData, testingLabels);
 
 	test(trainingData, trainingLabels, testingData, testingLabels);
 }

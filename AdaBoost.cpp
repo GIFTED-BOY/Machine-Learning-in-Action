@@ -33,8 +33,8 @@ DecisionStump AdaBoost::buildStump(Matrix D, Matrix &classEst)
 	double minError = LDBL_MAX;
 	for (int i = 0; i < featureNum; i++)
 	{
-		double minValue = dataSet.getColumnMinValue(i);
-		double maxValue = dataSet.getColumnMaxValue(i);
+		double minValue = dataSet.columnMinValue(i);
+		double maxValue = dataSet.columnMaxValue(i);
 		double stepSize = (maxValue - minValue) / steps;
 		for (int j = -1; j <= steps; j++)
 		{
@@ -45,9 +45,9 @@ DecisionStump AdaBoost::buildStump(Matrix D, Matrix &classEst)
 				double weightedError = 0.0;
 				for (int p = 0; p < sampleNum; p++)
 				{
-					double cls = getClass(dataSet.getRowValue(p), i, threshold, k);
-					weightedError += D.getValue(p, 0) * (cls != labels.getValue(p, 0));
-					predictedLabels.setValue(p, 0, cls);
+					double cls = getClass(dataSet.row(p), i, threshold, k);
+					weightedError += D[p][0] * (cls != labels[p][0]);
+					predictedLabels[p][0] = cls;
 				}
 				if (weightedError < minError)
 				{
@@ -79,7 +79,7 @@ void AdaBoost::buildClassifiers()
 		aggClassEst = aggClassEst + classEst * ds.alpha;
 		Matrix s = sign(aggClassEst);
 		int errorClassNum = 0;
-		for (int j = 0; j < sampleNum; j++) errorClassNum += (s.getValue(j, 0) != labels.getValue(j, 0));
+		for (int j = 0; j < sampleNum; j++) errorClassNum += (s[j][0] != labels[j][0]);
 		double errorRate = (double) errorClassNum / sampleNum;
 		if (0 == errorRate) break;
 	}
@@ -87,15 +87,15 @@ void AdaBoost::buildClassifiers()
 
 double AdaBoost::getClass(Matrix x, int featureIndex, double threshold, int ineq)
 {
-	if (0 == ineq) return x.getValue(0, featureIndex) <= threshold ? -1 : 1;
-	return x.getValue(0, featureIndex) > threshold ? -1 : 1;
+	if (0 == ineq) return x[0][featureIndex] <= threshold ? -1 : 1;
+	return x[0][featureIndex] > threshold ? -1 : 1;
 }
 
 
 
 
 
-void getDataSet2(string fileName, vector<vector<double> > &dataSet, vector<double> &labels)
+void getDataSet_AB(string fileName, vector<vector<double> > &dataSet, vector<double> &labels)
 {
 	ifstream in("dataset/Ch07/" + fileName);
 	string str;
@@ -122,14 +122,14 @@ void ABTest()
 {
 	vector<vector<double> > trainingDataSet;
 	vector<double> trainingLabels;
-	getDataSet2("horseColicTraining2.txt", trainingDataSet, trainingLabels);
+	getDataSet_AB("horseColicTraining2.txt", trainingDataSet, trainingLabels);
 	Matrix trainingX(trainingDataSet, trainingDataSet.size(), trainingDataSet[0].size());
 	Matrix trainingY(trainingLabels, trainingLabels.size(), 1);
 	AdaBoost ab(trainingX, trainingY, trainingDataSet.size(), trainingDataSet[0].size(), 10);
 
 	vector<vector<double> > testingDataSet;
 	vector<double> testingLabels;
-	getDataSet2("horseColicTest2.txt", testingDataSet, testingLabels);
+	getDataSet_AB("horseColicTest2.txt", testingDataSet, testingLabels);
 	int testingNum = testingDataSet.size();
 	Matrix testingX(testingDataSet, testingNum, testingDataSet[0].size());
 
@@ -137,7 +137,7 @@ void ABTest()
 	int correctNum = 0;
 	for (int j = 0; j < testingNum; j++)
 	{
-		double cls = ab.classify(testingX.getRowValue(j));
+		double cls = ab.classify(testingX.row(j));
 		if (cls == testingLabels[j]) correctNum++;
 		cout << "ab: " << cls << "\treal: " << testingLabels[j] << endl;
 	}

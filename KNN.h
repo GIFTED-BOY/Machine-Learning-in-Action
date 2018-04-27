@@ -12,34 +12,35 @@
 
 #include <vector>
 #include <string>
+#include "Matrix.h"
 
 using namespace std;
 
 class KNN
 {
 private:
-	vector<vector<double> > dataSet;
-	vector<int> labels;
+	Matrix dataSet;
+	Matrix labels;
 	int featureNum;
 	int sampleNum;
 
 public:
-	KNN(vector<vector<double> > x, vector<int> y, int m, int n);
+	KNN(Matrix x, Matrix y, int m, int n);
 
-	int classify(vector<double> x, int k);
+	double classify(Matrix x, int k);
 
 private:
-	vector<int> getKNN(vector<double> x, int k);
-	int getClass(vector<int> knn, int k);
+	vector<double> getKNN(Matrix x, int k);
+	double getClass(vector<double> knn, int k);
 };
 
 
-void getDataSet(vector<vector<double> > &dataSet, vector<int> &labels);
+void getDataSet_KNN(vector<vector<double> > &dataSet, vector<double> &labels);
 void normalize(vector<vector<double> > &dataSet, int sampleNum, int featureNum);
-void getDataSet(string dir, vector<vector<double> > &dataSet, vector<int> &labels);
+void getDataSet_KNN(string dir, vector<vector<double> > &dataSet, vector<double> &labels);
 void KNNTest1();
 void KNNTest2();
-void test(vector<vector<double> > trainingData, vector<int> trainingLabels, vector<vector<double> > testingData, vector<int> testingLabels);
+void test(vector<vector<double> > trainingData, vector<double> trainingLabels, vector<vector<double> > testingData, vector<double> testingLabels);
 
 
 #endif

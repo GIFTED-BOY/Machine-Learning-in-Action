@@ -16,6 +16,8 @@
 
 using namespace std;
 
+// -----------------------------------------------------
+
 class TreeNode
 {
 public:
@@ -23,6 +25,8 @@ public:
 	string value;
 	unordered_map<string, TreeNode*> children;
 };
+
+// -----------------------------------------------------
 
 class DecisionTree
 {
@@ -52,7 +56,7 @@ private:
 };
 
 
-void getDataSet(vector<vector<string> > &mDataSet);
+void getDataSet_DT(vector<vector<string> > &mDataSet);
 void DTTest();
 
 
